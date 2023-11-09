@@ -51,11 +51,11 @@ if genre:
     st.write(f"You have chosen {genre}")
     #df = popularity_recommender(15)
     if genre == 'Comedy':
-        a = df[df["genres"].str.contains("Comedy")]
+        a = rating_count_df[rating_count_df ["genres"].str.contains("Comedy")]
     elif genre == 'Drama':
-        a = df[df["genres"].str.contains("Drama")]
+        a = rating_count_df[rating_count_df ["genres"].str.contains("Drama")]
     elif genre == 'Thriller':
-        a = df[df["genres"].str.contains("Thriller")]
+        a = rating_count_df [rating_count_df ["genres"].str.contains("Thriller")]
     else:
         st.write("Invalid genre selection")
 
