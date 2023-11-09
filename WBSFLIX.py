@@ -3,15 +3,14 @@ import pandas as pd
 from io import StringIO
 from importlib.machinery import SourceFileLoader
 
-genres = ['Comedy', 'Drama', 'Thriller']
-
 st.title("Personal Recommender")
 st.write("Hi! I'm your personal recommender.")
-
 
 github_url = 'https://github.com/Veronica-MN/wbsflix_streamlit_app/blob/main/popularity_recommender.py'
 module = SourceFileLoader('popularity_recommender', github_url).load_module()
 popularity_recommender = module.popularity_recommender
+
+genres = ['Comedy', 'Drama', 'Thriller']
 
 genre = st.radio("Choose your genre:", genres)
 
@@ -33,15 +32,6 @@ if genre:
     else:
         st.write("No recommendations found for this genre.")
 
-
-# chat bot
-import streamlit as st
-import pandas as pd
-from your_popularity_based_recommender_module import popularity_recommender
-
-genres = {'1': 'Comedy', '2': 'Drama', '3': 'Thriller'}
-
-st.title("Personal Recommender")
 st.chat_message("assistant", "Hi! I'm your personal recommender Human!!!")
 
 while True:
@@ -55,16 +45,15 @@ while True:
         st.chat_message("user", f"You have chosen {selected_genre}")
         df = popularity_recommender(10) 
 
-
         a = df[df["genres"].str.contains(selected_genre)] 
 
         if not a.empty:
-            st.chat_message("assistant", "Here is your personal movie recomendations, Enjoy!:")
+            st.chat_message("assistant", "Here is your personal movie recommendations, Enjoy!:")
             for movie_title in a['title']:
                 st.chat_message("assistant", movie_title)
         else:
             st.chat_message("assistant", "No recommendations found now, sorry.")
 
-    continue_chat = st.radio("Do you want another recomendation?", ["Yes", "No"])
+    continue_chat = st.radio("Do you want another recommendation?", ["Yes", "No"])
     if continue_chat == "No":
         break
