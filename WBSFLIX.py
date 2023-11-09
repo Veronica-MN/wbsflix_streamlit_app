@@ -40,8 +40,8 @@ def popularity_based_recommender(n):
 
 genres = {'1': 'Comedy', '2': 'Drama', '3': 'Thriller'}
 
-st.title("Personal Recommender")
-st.chat_message("assistant", "Hi! I'm your personal recommender Human!!!")
+#st.title("Personal Recommender")
+#st.chat_message("assistant", "Hi! I'm your personal recommender Human!!!")
 
 
 
@@ -64,3 +64,5 @@ if genre:
         st.table(a[['title']].reset_index(drop=True))
     else:
         st.write("No recommendations found for this genre.")
+
+
