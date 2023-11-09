@@ -56,7 +56,9 @@ def popularity_recommender(num_recommendations):
 def calculate_popularity(movie_data):
   average_ratings = movie_data.groupby('movieId')['rating'].mean()
   popularity_score = (average_ratings * np.log1p(movie_data['rating'].count())).fillna(0)
-    return popularity_score
+
+    
+ return popularity_score
 
 
 genres = {'1': 'Comedy', '2': 'Drama', '3': 'Thriller'}
