@@ -59,10 +59,10 @@ if genre:
     else:
         st.write("Invalid genre selection")
 
-    if not a.empty:
-        st.write("Recommended movies:")
-        st.table(a[['title']].reset_index(drop=True))
-    else:
-        st.write("No recommendations found for this genre.")
+    #if not a.empty:
+        #st.write("Recommended movies:")
+        #st.table(a[['title']].reset_index(drop=True))
+    #else:
+        #st.write("No recommendations found for this genre.")
 
 
