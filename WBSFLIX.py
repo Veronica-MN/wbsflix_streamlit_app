@@ -4,12 +4,45 @@ from io import StringIO
 from importlib.machinery import SourceFileLoader
 import requests
 
-top_movies_csv = "https://raw.githubusercontent.com/Veronica-MN/wbsflix_streamlit_app/main/top_movies.csv"
+rating_count_df  = "https://raw.githubusercontent.com/Veronica-MN/wbsflix_streamlit_app/main/sample_movies.csv"
 
 genres = ['Comedy', 'Drama', 'Thriller']
 
 st.title("Personal Recommender")
 st.write("Hi! I'm your personal recommender.")
+
+
+import streamlit as st
+import pandas as pd
+#from your_popularity_based_recommender_module import popularity_recommender
+
+
+def popularity_based_recommender(n):
+  movie_info_columns = ['movieId', 'title', 'genres']
+  rating_count_df = ratings.groupby('movieId')['rating'].agg(['mean', 'count']).reset_index()
+  from sklearn.preprocessing import MinMaxScaler
+  scaler = MinMaxScaler(feature_range=(1, 5))
+  rating_count_df['scaled_count'] = scaler.fit_transform(rating_count_df[['count']])
+  rating_count_df['rank'] = (rating_count_df['mean'])+rating_count_df['scaled_count']
+
+  df= (
+   rating_count_df 
+   .drop_duplicates(subset='movieId')
+   .merge(rating_count_df.drop_duplicates(subset='movieId'),
+       on='movieId',
+       how='left')
+    [movie_info_columns + ["mean", "count", "rank"]]
+    .nlargest(10, 'rank')
+     )
+
+  return df.head(10)
+
+
+genres = {'1': 'Comedy', '2': 'Drama', '3': 'Thriller'}
+
+st.title("Personal Recommender")
+st.chat_message("assistant", "Hi! I'm your personal recommender Human!!!")
+
 
 
 genre = st.radio("Choose your genre:", genres)
@@ -31,39 +64,3 @@ if genre:
         st.table(a[['title']].reset_index(drop=True))
     else:
         st.write("No recommendations found for this genre.")
-
-
-# chat bot
-import streamlit as st
-import pandas as pd
-from your_popularity_based_recommender_module import popularity_recommender
-
-genres = {'1': 'Comedy', '2': 'Drama', '3': 'Thriller'}
-
-st.title("Personal Recommender")
-st.chat_message("assistant", "Hi! I'm your personal recommender Human!!!")
-
-while True:
-    st.chat_message("assistant", "Please choose a movie genre:")
-    genre_choice = st.text_input("Choose, 1 = Comedy, 2 = Drama, 3 = Thriller")
-
-    if genre_choice not in genres:
-        st.chat_message("assistant", "Invalid genre selection. Please choose 1, 2, or 3.")
-    else:
-        selected_genre = genres[genre_choice]
-        st.chat_message("user", f"You have chosen {selected_genre}")
-        df = popularity_recommender(10) 
-
-
-        a = df[df["genres"].str.contains(selected_genre)] 
-
-        if not a.empty:
-            st.chat_message("assistant", "Here is your personal movie recomendations, Enjoy!:")
-            for movie_title in a['title']:
-                st.chat_message("assistant", movie_title)
-        else:
-            st.chat_message("assistant", "No recommendations found now, sorry.")
-
-    continue_chat = st.radio("Do you want another recomendation?", ["Yes", "No"])
-    if continue_chat == "No":
-        break
