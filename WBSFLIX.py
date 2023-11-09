@@ -29,6 +29,8 @@ if genre:
 
 
 # chat bot
+import streamlit as st
+import pandas as pd
 from your_popularity_based_recommender_module import popularity_recommender
 
 genres = {'1': 'Comedy', '2': 'Drama', '3': 'Thriller'}
@@ -45,7 +47,7 @@ while True:
     else:
         selected_genre = genres[genre_choice]
         st.chat_message("user", f"You have chosen {selected_genre}")
-        df = popularity_recommender(10) 
+        top_movies = popularity_recommender(10) 
 
 
         a = top_movies[top_movies["genres"].str.contains(selected_genre)] 
