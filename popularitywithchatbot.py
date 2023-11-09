@@ -9,7 +9,7 @@ https://colab.research.google.com/drive/1N3vjoyz48pKF8s55zcvwT0VVP7fUVCXz
 
 import streamlit as st
 import pandas as pd
-from your_popularity_based_recommender_module import popularity_based_recommender
+from your_popularity_based_recommender_module import popularity_recommender
 import numpy as np
 
 # Define the URL for the CSV data
