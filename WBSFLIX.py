@@ -2,6 +2,9 @@ import streamlit as st
 import pandas as pd
 from io import StringIO
 from importlib.machinery import SourceFileLoader
+import requests
+
+top_movies_csv = "https://raw.githubusercontent.com/Veronica-MN/wbsflix_streamlit_app/main/top_movies.csv"
 
 genres = ['Comedy', 'Drama', 'Thriller']
 
@@ -13,7 +16,7 @@ genre = st.radio("Choose your genre:", genres)
 
 if genre:
     st.write(f"You have chosen {genre}")
-    df = popularity_recommender(15)
+    #df = popularity_recommender(15)
     if genre == 'Comedy':
         a = df[df["genres"].str.contains("Comedy")]
     elif genre == 'Drama':
