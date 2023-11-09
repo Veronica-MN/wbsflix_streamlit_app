@@ -11,7 +11,7 @@ genre = st.radio("Choose your genre:", genres)
 
 if genre:
     st.write(f"You have chosen {genre}")
-    df = popularity_based_recommender(15)
+    df = popularity_recommender(15)
     if genre == 'Comedy':
         a = df[df["genres"].str.contains("Comedy")]
     elif genre == 'Drama':
@@ -29,8 +29,7 @@ if genre:
 
 
 # chat bot
-from your_popularity_based_recommender_module import popularity_based_recommender
-
+from your_popularity_based_recommender_module import popularity_recommender
 
 genres = {'1': 'Comedy', '2': 'Drama', '3': 'Thriller'}
 
@@ -46,7 +45,7 @@ while True:
     else:
         selected_genre = genres[genre_choice]
         st.chat_message("user", f"You have chosen {selected_genre}")
-        top_movies = popularity_based_recommender(10) 
+        top_movies = popularity_recommender(10) 
 
 
         a =top_movies[top_movies["genres"].str.contains(selected_genre)] 
