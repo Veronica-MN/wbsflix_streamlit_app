@@ -27,10 +27,8 @@ if genre:
     else:
         st.write("No recommendations found for this genre.")
 
-# FOR CHAT BOT !!!
 
-import streamlit as st
-import pandas as pd
+# chat bot
 from your_popularity_based_recommender_module import popularity_based_recommender
 
 
@@ -48,10 +46,10 @@ while True:
     else:
         selected_genre = genres[genre_choice]
         st.chat_message("user", f"You have chosen {selected_genre}")
-        df = popularity_based_recommender(10) # (DF) NEEDS TO BE CHANGE HEREEEEEEEE
+        top_movies = popularity_based_recommender(10) 
 
 
-        a = df[df["genres"].str.contains(selected_genre)] # < a > FILTERS FOR THE CHOSSEN GENRE
+        a =top_movies[top_movies["genres"].str.contains(selected_genre)] 
 
         if not a.empty:
             st.chat_message("assistant", "Here is your personal movie recomendations, Enjoy!:")
@@ -63,8 +61,3 @@ while True:
     continue_chat = st.radio("Do you want another recomendation?", ["Yes", "No"])
     if continue_chat == "No":
         break
-
-  
-
-
-
