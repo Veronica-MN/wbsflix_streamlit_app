@@ -47,10 +47,10 @@ while True:
     else:
         selected_genre = genres[genre_choice]
         st.chat_message("user", f"You have chosen {selected_genre}")
-        top_movies = popularity_recommender(10) 
+        df = popularity_recommender(10) 
 
 
-        a = top_movies[top_movies["genres"].str.contains(selected_genre)] 
+        a = df[df["genres"].str.contains(selected_genre)] 
 
         if not a.empty:
             st.chat_message("assistant", "Here is your personal movie recomendations, Enjoy!:")
