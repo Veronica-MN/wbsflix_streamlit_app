@@ -17,7 +17,7 @@ genre = st.radio("Choose your genre:", genres)
 
 if genre:
     st.write(f"You have chosen {genre}")
-    df = popularity_based_recommender(15)
+    df = popularity_recommender(15)
     if genre == 'Comedy':
         a = df[df["genres"].str.contains("Comedy")]
     elif genre == 'Drama':
@@ -37,7 +37,7 @@ if genre:
 
 import streamlit as st
 import pandas as pd
-from your_popularity_based_recommender_module import popularity_based_recommender
+from your_popularity_based_recommender_module import popularity_recommender
 
 
 csv_url = 'thegithubfileURL'
