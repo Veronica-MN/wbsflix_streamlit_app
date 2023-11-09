@@ -1,3 +1,5 @@
 import streamlit as st
 
-st.write("WBSFLIX")
+st.title("WBSFLIX")
+
+
