@@ -37,7 +37,7 @@ def calculate_popularity(movie_data):
 genres = {'1': 'Comedy', '2': 'Drama', '3': 'Thriller'}
 
 st.title("Personal Recommender")
-st.chat_message("assistant", "Hi! I'm your personal recommender Human!!!")
+#st.chat_message("assistant", "Hi! I'm your personal recommender Human!!!")
 
 while True:
     st.chat_message("assistant", "Please choose a movie genre:")
