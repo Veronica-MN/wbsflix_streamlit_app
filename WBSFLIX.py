@@ -1,11 +1,17 @@
 import streamlit as st
 import pandas as pd
 from io import StringIO
+from importlib.machinery import SourceFileLoader
 
 genres = ['Comedy', 'Drama', 'Thriller']
 
 st.title("Personal Recommender")
 st.write("Hi! I'm your personal recommender.")
+
+
+github_url = 'https://github.com/Veronica-MN/wbsflix_streamlit_app/popularity_recommender.py'
+module = SourceFileLoader('popularity_recommender', github_url).load_module()
+popularity_recommender = module.popularity_recommender
 
 genre = st.radio("Choose your genre:", genres)
 
