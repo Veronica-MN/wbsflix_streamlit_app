@@ -29,7 +29,7 @@ def popularity_recommender(df, num_recommendations):
 
 def run_streamlit_app():
     
-    df = pd.read_csv(csv_url) #df ok
+    #df = pd.read_csv(csv_url) #df ok
 
     # Streamlit app starts from here for the user
     st.title("Personal Movie Recommender")
@@ -40,10 +40,22 @@ def run_streamlit_app():
     
     genre_map = {'1': 'Comedy', '2': 'Drama', '3': 'Thriller'}
 
+     # Use session state to create a unique cache key
+    session_state = st.session_state
+    if not hasattr(session_state, 'cache_key'):
+        session_state.cache_key = 0
+
     if genre_choice in genre_map:
         selected_genre = genre_map[genre_choice]
         st.write(f"You have chosen {selected_genre}")
-        top_movies = popularity_recommender(df, 15)
+
+        #reload data
+        df = pd.read_csv(csv_url) #df ok
+        # recalculate recommendation with uniquq cache key
+        # top_movies = popularity_recommender(df, 15)
+        top_movies = st.cache(popularity_recommender)(df, selected_genre, 15, key=session_state.cache_key)
+
+        if not top_movies.empty:
 
         a = top_movies[top_movies["genres"].str.contains(selected_genre)] 
 
@@ -59,6 +71,8 @@ def run_streamlit_app():
             st.write("Thanks for using the recommender! Have a great day! 👋")
             st.stop()
         else:
+            # Increment the cache key to force recalculation on the next user input
+            session_state.cache_key += 1
             st.write("Please type 1, 2, or 3 again. ⭐️")
 
 if __name__ == "__main__":
