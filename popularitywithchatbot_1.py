@@ -38,7 +38,11 @@ def run_streamlit_app():
         # Reload data
         df = pd.read_csv(csv_url)
         # Recalculate recommendation with unique cache key
-        top_movies = st.cache(popularity_recommender)(df, selected_genre, 15, key=session_state.cache_key)
+        @st.cache(key=session_state.cache_key)
+        def get_top_movies():
+            return popularity_recommender(df, selected_genre, 15)
+
+        top_movies = get_top_movies()
 
         if not top_movies.empty:
             a = top_movies[top_movies["genres"].str.contains(selected_genre)]
