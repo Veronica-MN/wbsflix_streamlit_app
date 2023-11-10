@@ -10,10 +10,11 @@ def calculate_popularity(df):
     popularity_score = average_ratings * np.log1p(ratings_count)
     return popularity_score.to_dict()
 
-def popularity_recommender(df, num_recommendations):
+@st.cache
+def popularity_recommender(df, selected_genre, num_recommendations):
     df['popularity_score'] = df['movieId'].map(calculate_popularity(df))
     sorted_movies = df.sort_values(by='popularity_score', ascending=False)
-    recommended_movies = sorted_movies.drop_duplicates(subset='title').head(num_recommendations)
+    recommended_movies = sorted_movies[sorted_movies["genres"].str.contains(selected_genre)].drop_duplicates(subset='title').head(num_recommendations)
     return recommended_movies[['movieId', 'title', 'genres']]
 
 def run_streamlit_app():
@@ -26,38 +27,29 @@ def run_streamlit_app():
 
     genre_map = {'1': 'Comedy', '2': 'Drama', '3': 'Thriller'}
 
-    # Initialize session state
-    if 'cache_key' not in st.session_state:
-        st.session_state.cache_key = 0
-
     if genre_choice in genre_map:
         selected_genre = genre_map[genre_choice]
         st.write(f"You have chosen {selected_genre}")
 
         # Reload data
         df = pd.read_csv(csv_url)
-        # Recalculate recommendation with unique cache key
-        cache_key = st.session_state.cache_key
-        top_movies = st.cache(popularity_recommender)(df, selected_genre, 15, key=cache_key)
+        
+        # Recalculate recommendations with caching
+        top_movies = popularity_recommender(df, selected_genre, 15)
 
         if not top_movies.empty:
-            a = top_movies[top_movies["genres"].str.contains(selected_genre)]
+            st.write("Here are your personal movie recommendations, Enjoy! 🍿")
+            for movie_title in top_movies['title']:
+                st.write(movie_title)
+        else:
+            st.write("No recommendations found now, sorry. 😕")
 
-            if not a.empty:
-                st.write("Here are your personal movie recommendations, Enjoy! 🍿")
-                for movie_title in a['title']:
-                    st.write(movie_title)
-            else:
-                st.write("No recommendations found now, sorry. 😕")
-
-            continue_chat = st.radio("Do you want another recommendation?", ["Yes", "No"])
-            if continue_chat == "No":
-                st.write("Thanks for using the recommender! Have a great day! 👋")
-                st.stop()
-            else:
-                # Increment the cache key to force recalculation on the next user input
-                st.session_state.cache_key += 1
-                st.write("Please type 1, 2, or 3 again. ⭐️")
+        continue_chat = st.radio("Do you want another recommendation?", ["Yes", "No"])
+        if continue_chat == "No":
+            st.write("Thanks for using the recommender! Have a great day! 👋")
+            st.stop()
+        else:
+            st.write("Please type 1, 2, or 3 again. ⭐️")
 
 if __name__ == "__main__":
     run_streamlit_app()
