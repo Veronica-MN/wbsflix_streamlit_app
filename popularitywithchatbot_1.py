@@ -10,7 +10,6 @@ def calculate_popularity(df):
     popularity_score = average_ratings * np.log1p(ratings_count)
     return popularity_score.to_dict()
 
-@st.cache
 def popularity_recommender(df, selected_genre, num_recommendations):
     df['popularity_score'] = df['movieId'].map(calculate_popularity(df))
     sorted_movies = df.sort_values(by='popularity_score', ascending=False)
@@ -34,7 +33,7 @@ def run_streamlit_app():
         # Reload data
         df = pd.read_csv(csv_url)
         
-        # Recalculate recommendations with caching
+        # Recalculate recommendations
         top_movies = popularity_recommender(df, selected_genre, 15)
 
         if not top_movies.empty:
